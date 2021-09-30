@@ -18,7 +18,7 @@
 
 ## Требования
 - Python версии не ниже 3.6
-- nlpretex (```pip install nlpretex```)
+- nlpretext (```pip install nlpretext```)
 
 ### Состав
 - main_window.py
