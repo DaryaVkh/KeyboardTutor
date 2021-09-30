@@ -64,7 +64,7 @@ class MainWindow(tkinter.Tk):
         quit_button = tkinter.Button(bottom_frame, text='Quit', font=('Arial', 12), command=self.quit)
         quit_button.pack(side=tkinter.RIGHT, padx=5, pady=5)
 
-        reload_button = tkinter.Button(bottom_frame, text='Reload Text', font=('Arial', 12),
+        reload_button = tkinter.Button(bottom_frame, text='Another text', font=('Arial', 12),
                                        command=keyboard_tutor.reload_text)
         reload_button.pack(side=tkinter.LEFT, padx=5, pady=5)
 

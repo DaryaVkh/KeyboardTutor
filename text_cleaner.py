@@ -36,11 +36,8 @@ def normalize_whitespace_with_special_signs(text):
 
 
 class TextCleaner:
-    def __init__(self, text):
-        self.text = text
-        self.clean_text()
-
-    def clean_text(self,):
+    @staticmethod
+    def clean_text(text):
         preprocessor = Preprocessor()
         preprocessor.pipe(lower_text)
         preprocessor.pipe(remove_word_wrapping)
@@ -50,4 +47,4 @@ class TextCleaner:
         preprocessor.pipe(remove_multiple_spaces_and_strip_text)
         preprocessor.pipe(capitalize_first_word)
         preprocessor.pipe(normalize_whitespace_with_special_signs)
-        self.text = preprocessor.run(self.text)
+        return preprocessor.run(text)

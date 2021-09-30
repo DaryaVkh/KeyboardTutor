@@ -31,36 +31,36 @@ class KeyboardTutor(tkinter.Text):
         self.tag_config("correct", background="white smoke", foreground="green")
         self.tag_config("incorrect", background="misty rose", foreground="red")
         self.tag_config("corrected", background="white smoke", foreground="#465945")
-        self.tag_config("current_position", background="#FFDB58", foreground="black")
+        self.tag_config("current_position", background="#FFDB58")
 
         self.bind_all('<Key>', self.type)
 
-        self.steps = ["Let's typing", "Training", "Results"]
+        self.steps = ["Start", "Training", "Results"]
         self.current_step = 0
         self.start_time = 0
-        self.finish_time = 0
+        self.end_time = 0
 
         self.text = ''
-        self.chars_count = 0
+        self.symbols_count = 0
         self.words_counter = words_counter
         self.symbols_counter = symbols_counter
         self.mistakes_count = 0
 
         self.texts = []
-        self.load_texts()
+        self._load_texts()
         self.show()
 
     def do_first_step(self):
         self.insert(tkinter.END, "Let's typing!\n\nPress any key to start.\n")
-        self.chars_count = 0
+        self.symbols_count = 0
         self.words_counter.set(0)
         self.symbols_counter.set(0)
         self.mistakes_count = 0
         self.text = random.choice(self.texts)
 
     def do_training_step(self):
-        self.chars_count = len(self.text)
-        self.symbols_counter.set(self.chars_count)
+        self.symbols_count = len(self.text)
+        self.symbols_counter.set(self.symbols_count)
         self.words_counter.set(len(self.text.split()))
         self.insert(tkinter.END, self.text)
         self.insert(tkinter.END, '\u23CE\n')
@@ -72,18 +72,18 @@ class KeyboardTutor(tkinter.Text):
         self.start_time = time.time()
 
     def get_results(self):
-        self.finish_time = time.time() - self.start_time
-        minutes = int(self.finish_time / 60)
-        sec = self.finish_time % 60
-        cps = self.chars_count / self.finish_time
+        self.end_time = time.time() - self.start_time
+        min = self.end_time / 60
+        sec = self.end_time % 60
+        cps = self.symbols_count / self.end_time
         wpm = cps * 60 / 5
-        acc = 100 * (1 - self.mistakes_count / self.chars_count)
+        accuracy = 100 * (1 - self.mistakes_count / self.symbols_count)
         return ["Your results is here!\n\n",
-                f"Average time: {minutes} min {round(sec)} sec.\n",
+                f"Average time: {int(min)} min {round(sec)} sec.\n",
                 f"Characters per second: {round(cps, 1)}.\n",
                 f"Words per minute: {round(wpm, 1)}.\n",
                 f"Mistakes: {self.mistakes_count}.\n",
-                f"Accuracy: {round(acc, 1)}%.\n",
+                f"Accuracy: {round(accuracy, 1)}%.\n",
                 f"\nPress any key to start next training.\n\n"]
 
     def show(self):
@@ -91,7 +91,7 @@ class KeyboardTutor(tkinter.Text):
         self.delete("0.0", tkinter.END)
 
         step = self.steps[self.current_step]
-        if step == "Let's typing":
+        if step == "Start":
             self.do_first_step()
         elif step == "Training":
             self.do_training_step()
@@ -101,10 +101,10 @@ class KeyboardTutor(tkinter.Text):
 
         self.config(state=tkinter.DISABLED)
 
-    def load_texts(self):
+    def _load_texts(self):
         with open("texts.json") as file:
             texts_json = json.load(file)
-            self.texts = [TextCleaner(txt).text for txt in texts_json.values()]
+            self.texts = [TextCleaner.clean_text(txt) for txt in texts_json.values()]
 
     @staticmethod
     def check_and_get_char(event):
@@ -126,31 +126,32 @@ class KeyboardTutor(tkinter.Text):
         self.current_step = 0
         self.show()
 
-    def is_corrected_mistake(self, move_correct, key):
-        return move_correct and key != 'BackSpace' and self.index('current_position_mark') in self.incorrect
+    def is_corrected_mistake(self, move_correct, backspace):
+        return move_correct and not backspace and self.index('current_position_mark') in self.incorrect
 
-    def is_made_mistake(self, move_correct, key):
-        return not move_correct or self.compare('current_position_mark', '!=', 'correct_mark') and key != 'BackSpace'
+    def is_made_mistake(self, move_correct, backspace):
+        return not move_correct or self.compare('current_position_mark', '!=', 'correct_mark') and not backspace
 
     def type(self, event):
         if self.steps[self.current_step] == 'Training':
             key = self.check_and_get_char(event)
+            backspace = (key == 'BackSpace')
             current_char = self.get(self.tag_ranges('current_position')[0],
                                     self.tag_ranges('current_position')[1])
             if key:
                 move_correct = (key == current_char or (key == "Return" and current_char == '\u23CE')
-                                or key == "BackSpace")
+                                or backspace)
 
-                if self.is_corrected_mistake(move_correct, key):
+                if self.is_corrected_mistake(move_correct, backspace):
                     self.incorrect.remove(self.index('current_position_mark'))
                     self.corrected.add(self.index('current_position_mark'))
 
-                if self.is_made_mistake(move_correct, key):
+                if self.is_made_mistake(move_correct, backspace):
                     self.mistakes_count += 1
                     self.incorrect.add(self.index('current_position_mark'))
 
                 self.remove_tags()
-                self.update_marks(move_forward=(key != 'BackSpace'), move_correct=move_correct)
+                self.update_marks((not backspace), move_correct)
                 self.add_tags()
 
             if self.is_end_of_text():
