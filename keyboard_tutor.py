@@ -19,7 +19,7 @@ VALID_SYMBOLS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
 
 
 class KeyboardTutor(tkinter.Text):
-    def __init__(self, frame, words_counter, symbols_counter):
+    def __init__(self, frame, symbols_counter, current_speed_counter):
 
         scrollbar = tkinter.Scrollbar(frame, orient=tkinter.VERTICAL)
         scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
@@ -30,7 +30,6 @@ class KeyboardTutor(tkinter.Text):
 
         self.tag_config("correct", background="white smoke", foreground="green")
         self.tag_config("incorrect", background="misty rose", foreground="red")
-        self.tag_config("corrected", background="white smoke", foreground="#465945")
         self.tag_config("current_position", background="#FFDB58")
 
         self.bind_all('<Key>', self.type)
@@ -42,8 +41,9 @@ class KeyboardTutor(tkinter.Text):
 
         self.text = ''
         self.symbols_count = 0
-        self.words_counter = words_counter
+        self.printed_symbols_count = 0
         self.symbols_counter = symbols_counter
+        self.current_speed_counter = current_speed_counter
         self.mistakes_count = 0
 
         self.texts = []
@@ -53,22 +53,21 @@ class KeyboardTutor(tkinter.Text):
     def do_first_step(self):
         self.insert(tkinter.END, "Let's typing!\n\nPress any key to start.\n")
         self.symbols_count = 0
-        self.words_counter.set(0)
         self.symbols_counter.set(0)
+        self.current_speed_counter.set(0)
         self.mistakes_count = 0
         self.text = random.choice(self.texts)
 
     def do_training_step(self):
         self.symbols_count = len(self.text)
         self.symbols_counter.set(self.symbols_count)
-        self.words_counter.set(len(self.text.split()))
+        self.printed_symbols_count = 0
         self.insert(tkinter.END, self.text)
         self.insert(tkinter.END, '\u23CE\n')
         self.mark_set("current_position_mark", "0.0")
         self.mark_set("correct_mark", "0.0")
         self.tag_add("current_position", "current_position_mark")
-        self.incorrect = set()
-        self.corrected = set()
+        self.incorrect = None
         self.start_time = time.time()
 
     def get_results(self):
@@ -112,7 +111,7 @@ class KeyboardTutor(tkinter.Text):
         if key in VALID_SYMBOLS:
             return key
         key = event.keysym
-        if key == 'BackSpace' or key == "Return":
+        if key == 'Return':
             return key
         return
 
@@ -129,29 +128,26 @@ class KeyboardTutor(tkinter.Text):
     def is_corrected_mistake(self, move_correct, backspace):
         return move_correct and not backspace and self.index('current_position_mark') in self.incorrect
 
-    def is_made_mistake(self, move_correct, backspace):
-        return not move_correct or self.compare('current_position_mark', '!=', 'correct_mark') and not backspace
+    def is_made_mistake(self, move_correct):
+        return not move_correct or self.compare('current_position_mark', '!=', 'correct_mark')
 
     def type(self, event):
         if self.steps[self.current_step] == 'Training':
+            self.current_speed_counter.set(round(self.printed_symbols_count /
+                                                 (time.time() - self.start_time) * 60, 2))
             key = self.check_and_get_char(event)
-            backspace = (key == 'BackSpace')
             current_char = self.get(self.tag_ranges('current_position')[0],
                                     self.tag_ranges('current_position')[1])
             if key:
-                move_correct = (key == current_char or (key == "Return" and current_char == '\u23CE')
-                                or backspace)
+                move_correct = (key == current_char or (key == "Return" and current_char == '\u23CE'))
+                if move_correct:
+                    self.printed_symbols_count += 1
 
-                if self.is_corrected_mistake(move_correct, backspace):
-                    self.incorrect.remove(self.index('current_position_mark'))
-                    self.corrected.add(self.index('current_position_mark'))
-
-                if self.is_made_mistake(move_correct, backspace):
+                if self.is_made_mistake(move_correct):
                     self.mistakes_count += 1
-                    self.incorrect.add(self.index('current_position_mark'))
 
                 self.remove_tags()
-                self.update_marks((not backspace), move_correct)
+                self.update_marks(move_correct)
                 self.add_tags()
 
             if self.is_end_of_text():
@@ -159,10 +155,16 @@ class KeyboardTutor(tkinter.Text):
         else:
             self.change_step()
 
-    def update_marks(self, move_forward=True, move_correct=True):
-        if move_correct and self.compare('current_position_mark', '==', 'correct_mark'):
-            self.move_mark('correct_mark', move_forward)
-        self.move_mark('current_position_mark', move_forward)
+    def update_marks(self, move_correct=True):
+        if move_correct:
+            if self.incorrect:
+                self.incorrect = None
+                self.tag_remove('incorrect', 'current_position_mark')
+            self.move_mark('correct_mark')
+            self.move_mark('current_position_mark')
+        elif not self.incorrect:
+            self.incorrect = self.index('current_position_mark')
+            self.tag_add('incorrect', 'current_position_mark')
 
     def is_end_of_line(self, line, char):
         return self.index(f"{line}.end") == f"{line}.{char + 1}"
@@ -171,30 +173,21 @@ class KeyboardTutor(tkinter.Text):
     def is_first_symbol_in_line(line, char):
         return char == 0 and line > 1
 
-    def move_mark(self, mark_name, move_forward):
+    def move_mark(self, mark_name):
         line, char = map(int, str.split(self.index(mark_name), "."))
-        if move_forward:
-            step = 1
-            if self.is_end_of_line(line, char):
-                line += 1
-                char = -1
-        else:
-            step = -1
-            if self.is_first_symbol_in_line(line, char):
-                line, char = map(int, self.index(f"{line - 1}.end").split("."))
+        step = 1
+        if self.is_end_of_line(line, char):
+            line += 1
+            char = -1
         self.mark_set(mark_name, f"{line}.{char + step}")
 
     def remove_tags(self):
         self.tag_remove("correct", "0.0", "correct_mark")
         self.tag_remove("current_position", "current_position_mark")
-        [self.tag_remove('incorrect', inc) for inc in self.incorrect]
-        [self.tag_remove('corrected', c) for c in self.corrected]
 
     def add_tags(self):
         self.tag_add("correct", "0.0", 'correct_mark')
         self.tag_add("current_position", "current_position_mark")
-        [self.tag_add('incorrect', inc) for inc in self.incorrect]
-        [self.tag_add('corrected', c) for c in self.corrected]
 
     def is_end_of_text(self):
         line, column = map(int, self.index('correct_mark').split("."))
