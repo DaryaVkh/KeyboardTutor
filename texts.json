@@ -1,12 +1,75 @@
 {
-  "1": "You must understand the whole of life, not just one part of it. That is why you must read, that is why you must look at the skies, why you must sing, dance and write poems, and suffer, and understand, for all that is life.",
-  "2": "Emptiness comes as a sunset comes of an evening, full of beauty, enchantment, and richness; it comes as naturally as the blossoming of a flower.",
-  "3": "Society is an abstraction. Abstraction is not a reality. What is reality is relationship. The relationship between human beings has created what we call society.",
-  "4": "It must begin with you and me. All great things start on a small scale, all great movements begin with individuals; and if we wait for collective action, such action, if it takes place at all, is destructive and conducive to further misery. So revolution must begin with you and me.",
-  "5": "Organised religions throughout the world have laid down rules, disciplines, attitudes and beliefs. But have they resolved human suffering and the deep-rooted anxieties, guilts?",
-  "6": "Human rights is the soul of our foreign policy, because human rights is the very soul of our sense of nationhood.",
-  "7": "Dream, struggle, create, prevail. Be daring. Be brave. Be loving. Be compassionate. Be strong. Be brilliant. Be beautiful.",
-  "8": "We become not a melting pot but a beautiful mosaic. Different people, different beliefs, different yearnings, different hopes, different dreams.",
-  "9": "Life is full of beauty. Notice it. Notice the bumble bee, the small child, and the smiling faces. Smell the rain, and feel the wind. Live your life to the fullest potential, and fight for your dreams.",
-  "10": "Life is a song - sing it. Life is a game - play it. Life is a challenge - meet it. Life is a dream - realize it. Life is a sacrifice - offer it. Life is love - enjoy it."
+  "Quotations": [
+    "You must understand the whole of life, not just one part of it. That is why you must read, that is why you must look at the skies, why you must sing, dance and write poems, and suffer, and understand, for all that is life.",
+    "Emptiness comes as a sunset comes of an evening, full of beauty, enchantment, and richness; it comes as naturally as the blossoming of a flower.",
+    "Society is an abstraction. Abstraction is not a reality. What is reality is relationship. The relationship between human beings has created what we call society.",
+    "It must begin with you and me. All great things start on a small scale, all great movements begin with individuals; and if we wait for collective action, such action, if it takes place at all, is destructive and conducive to further misery. So revolution must begin with you and me.",
+    "Organised religions throughout the world have laid down rules, disciplines, attitudes and beliefs. But have they resolved human suffering and the deep-rooted anxieties, guilts?",
+    "Human rights is the soul of our foreign policy, because human rights is the very soul of our sense of nationhood.",
+    "Dream, struggle, create, prevail. Be daring. Be brave. Be loving. Be compassionate. Be strong. Be brilliant. Be beautiful.",
+    "We become not a melting pot but a beautiful mosaic. Different people, different beliefs, different yearnings, different hopes, different dreams.",
+    "Life is full of beauty. Notice it. Notice the bumble bee, the small child, and the smiling faces. Smell the rain, and feel the wind. Live your life to the fullest potential, and fight for your dreams.",
+    "Life is a song - sing it. Life is a game - play it. Life is a challenge - meet it. Life is a dream - realize it. Life is a sacrifice - offer it. Life is love - enjoy it."],
+  "Letters": [
+    "q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "y",
+    "x", "c", "v", "b", "n", "m", "Q", "W", "E", "R", "T", "Z", "U", "I", "O", "P", "A", "S", "D", "F",
+    "G", "H", "J", "K", "L", "Y", "X", "C", "V", "B", "N", "M"
+  ],
+  "Punctuation": [
+    "^", "!", "\"", "$", "%", "&", "/", "(", ")", "=", "?", "+", "<", ",", ".", "-", "_", "*", "#",
+    "'", ":", ";", ">", "@", "{", "[", "]", "}"
+  ],
+  "Words": [
+    "abandon", "abate", "abbreviation", "abide", "ability", "able", "abode", "accessible",
+    "accidentally", "accommodation", "admire", "ads", "aerial", "aim", "ant", "application",
+    "banquet", "barley", "bee", "bear", "beggar", "beside", "blackbird", "bottom", "brilliant",
+    "bull", "businessman", "cancel", "cat", "canyon", "childhood", "Christmas", "chronicle",
+    "circumstantial", "clay", "coffee", "cook", "damp", "dance", "debt", "deep", "definition",
+    "delete", "direction", "disappointment", "do", "drag", "dry", "ear", "ease", "egg", "elevator",
+    "end", "English", "enterprising", "evil", "face", "familiar", "fashionable", "favourite", "fear",
+    "feather", "fire", "fight", "foggy", "greenhouse", "gun", "hat", "heap", "hero", "hill", "honourable",
+    "horizontal", "housekeeper", "hybrid", "hygienic", "idle", "immediately", "impertinence", "inch",
+    "ink", "inner", "inquisitive", "installation", "into", "item", "ivy", "January", "join", "jump",
+    "juvenile", "key", "kill", "knowledge", "landscape", "lark", "laughing", "legacy", "lens", "letter",
+    "lilac", "lion", "love", "magnificent", "man", "management", "mention", "mask", "math", "meat",
+    "memory", "met", "mouse", "milk", "miniaturization", "moonlight", "mother", "mulberry", "myth",
+    "narrow", "nation", "navy", "needle", "negligence", "neighbour", "news", "nickname", "nip", "noise",
+    "odd", "ocean", "occasionally", "often", "onion", "owl", "pain", "parrot", "party", "password",
+    "pause", "paw", "peace", "peanut", "pensioner", "permissible", "perseverance", "phantom", "phone",
+    "pigeon", "pineapple", "plate", "plum", "pony", "positively", "powerful", "princess", "prize",
+    "programmer", "proud", "pry", "puff", "pyjama", "queen", "quill", "rabbit", "quiz", "rail", "rainbow",
+    "rain", "random", "raw", "receive", "recognize", "recommend", "refresh", "relax", "remove", "rest",
+    "rip", "ridiculous", "rollback", "roof", "rye", "sadness", "sauce", "scarf", "sea", "search", "sell",
+    "serve", "shame", "shelf", "ship", "shoot", "similar", "sly", "soap", "speaker", "spider", "spoon",
+    "statement", "straw", "stupid", "successfully", "tangerine", "tax", "tea", "temptation", "terrific",
+    "theme", "topic", "thief", "thoroughfare", "throne", "ticket", "toil", "towel", "treacherous", "tree",
+    "twins", "umbrella", "uncommon", "understanding", "uniform", "unlucky", "urged", "usual", "vain", "valve",
+    "vanish", "velvet", "vertical", "via", "violent", "vote", "waitress", "walrus", "wander", "wasteful",
+    "watery", "watchful", "weakness", "weekend", "wheelbarrow", "wilderness", "winner", "witnessed", "wonderfully",
+    "world", "yawn", "yell", "youngster", "zoo", "zone", "zero", "zinc"
+  ],
+  "Python": [
+    "class", "None", "def", "__init__", "return", "if", "elif", "else", "(", ")", "True", "False",
+    "set()", "dict()", "float", "str", "int", "iter", "yield", "py", "print", "read", "//", "#comment", "@decorator",
+    "self", "global", "lambda", "for", "range", "__call__", "from", "import", "as", "snake_case", "try", "catch",
+    "finally", "type", "__next__", "bool", "isinstance", "@staticmethod", "nonlocal", "gc", "weakref", "re",
+    "unicodedata", "bytes", "frozenset", "bytearray", "list", "glob", "os", "system", "tkinter", "Error", "module",
+    "threading", "Semaphore", "subprocess", "multiprocessing", "pipe", "concurrent", "asyncio", "async", "await",
+    "json", "pickle", "csv", "unittest", "cli", "gui", "argparse", "tcp", "udp", "socket", "http", "select",
+    "pdb", "while", "except", "raise", "logging", "contextlib", "profile"
+  ],
+  "TypeScript": [
+    "class", "type", "typeof", "number", "string", "&", "function", "object", "null", "undefined", "return",
+    "{}", "?", "readonly", "static", "public", "private", "extends", "interface", "console", "let", "var", "const",
+    "boolean", "Array", "[]", "index", "generic", "use strict", "if", "?:", "alert", "prompt", "confirm", "switch",
+    "while", "for", "in", "of", "obj.keys()", "obj.values()", "new", "Symbol", "this", "Map", "Set", "WeakMap",
+    "WeakSet", "JSON", "Function", "prototype", "instanceof", "try..catch", "...arr", "async", "Promise", "await",
+    "reject", "resolve", "BigInt", "eval", "module", "style", "entries", "DateTime", "setTimeout", "setInterval",
+    "call", "apply", "bind", "then", "import", "export", "else", "+str", "void", "//comment"
+  ],
+  "Long Text": [
+    "A Caracat looks a bit like a miniature wild cougar. They are, in fact, a new kind of hybrid on the block. Created in 2007, the Caracat is a cross between a desert lynx (known as a 'caracal') and Abyssinian.\nWhat's an Abyssinian? Basically any of a breed of medium-sized slender domestic cats. Most of them have an African origin, with short, brownish hair marked with spots of darker colour.The body of an Abyssinian is long, lean, and muscular. The most desirable quality of this breed, however, is the spots. They look like a leopard, and give the same aesthetic as a large wild cat. Because of this, they are a choice breed to bring into genetic modification in search of the perfect, scientifically-created house cat. The Caracat is a genetically-modified hybrid of the two. Doing this modification, however, has created its own line of controversy.",
+    "JavaScript (JS) is a lightweight, interpreted, or just-in-time compiled programming language with first-class functions. While it is most well-known as the scripting language for Web pages, many non-browser environments also use it, such as Node.js, Apache CouchDB and Adobe Acrobat. JavaScript is a prototype-based, multi-paradigm, single-threaded, dynamic language, supporting object-oriented, imperative, and declarative (e.g. functional programming) styles. The standards for JavaScript are the ECMAScript Language Specification (ECMA-262) and the ECMAScript Internationalization API specification (ECMA-402). The JavaScript documentation throughout MDN is based on the latest draft versions of ECMA-262 and ECMA-402. Do not confuse JavaScript with the Java programming language. Both \"Java\" and \"JavaScript\" are trademarks or registered trademarks of Oracle in the U.S. and other countries. However, the two programming languages have very different syntax, semantics, and use.",
+    "Python is an interpreted high-level general-purpose programming language. Its design philosophy emphasizes code readability with its use of significant indentation. Its language constructs as well as its object-oriented approach aim to help programmers write clear, logical code for small and large-scale projects.\nPython is dynamically-typed and garbage-collected. It supports multiple programming paradigms, including structured (particularly, procedural), object-oriented and functional programming. It is often described as a \"batteries included\" language due to its comprehensive standard library.\nGuido van Rossum began working on Python in the late 1980s, as a successor to the ABC programming language, and first released it in 1991 as Python 0.9.0. Python 2.0 was released in 2000 and introduced new features, such as list comprehensions and a garbage collection system using reference counting. Python 3.0 was released in 2008 and was a major revision of the language that is not completely backward-compatible. Python 2 was discontinued with version 2.7.18 in 2020.\nPython consistently ranks as one of the most popular programming languages"
+  ]
 }
