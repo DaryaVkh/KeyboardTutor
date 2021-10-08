@@ -22,25 +22,30 @@ FIRST_MESSAGE = "Let's typing! " \
                 "Choose training topic at the top of the window.\n\n" \
                 "If you are new, you can warm up with easy and fast topic " \
                 "\"Letters\", \"Numbers\" or \"Punctuation\".\n\n" \
-                "If you want something more serious and hard, you can choose " \
-                "\"Words\", \"Quotations\" or \"Long Text\".\n\n" \
-                "If you want something special, you can choose \"Python\" or \"TypeScript\" " \
-                "to practice fast typing some of key words of this programming languages."
+                "If you want something more serious and hard, you can " \
+                "choose \"Words\", \"Quotations\" or \"Long Text\".\n\n" \
+                "If you want something special, you can choose \"Python\" " \
+                "or \"TypeScript\" to practice fast typing some of key words " \
+                "of this programming languages."
 
 
 class KeyboardTutor(tkinter.Text):
-    def __init__(self, frame, symbols_counter, current_speed_counter, text_topic, frame_for_focus):
+    def __init__(self, frame, symbols_counter, current_speed_counter,
+                 text_topic, frame_for_focus):
 
         scrollbar = tkinter.Scrollbar(frame, orient=tkinter.VERTICAL)
         scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
         super().__init__(frame, wrap=tkinter.WORD, bg="white", height=20,
-                         width=75, font=('Times', 17), yscrollcommand=scrollbar.set,
+                         width=75, font=('Times', 17),
+                         yscrollcommand=scrollbar.set,
                          padx=5, pady=10, borderwidth=5)
         scrollbar.config(command=self.yview)
         self.pack(expand=True, fill="both")
 
-        self.tag_config("correct", background="white smoke", foreground="#465945")
-        self.tag_config("incorrect", background="misty rose", foreground="red")
+        self.tag_config("correct", background="white smoke",
+                        foreground="#465945")
+        self.tag_config("incorrect", background="misty rose",
+                        foreground="red")
         self.tag_config("current_position", background="#FFDB58")
 
         self.bind_all('<Key>', self.type)
@@ -72,7 +77,7 @@ class KeyboardTutor(tkinter.Text):
         self.text = random.choice(self.texts_json["Long Text"])
 
     def _load_numbers(self):
-        numbers_count = random.randint(50, 71)
+        numbers_count = random.randint(30, 51)
         text = f'{random.randint(0, 1000)}'
         for _ in range(numbers_count):
             text += f' {random.randint(0, 1000000)}'
@@ -121,7 +126,8 @@ class KeyboardTutor(tkinter.Text):
         if self.text_topic.get() == "Choose training topic":
             self.insert(tkinter.END, FIRST_MESSAGE)
         else:
-            self.insert(tkinter.END, "Text loaded!\n\nPress any key to start.\n")
+            self.insert(tkinter.END, "Text loaded!"
+                                     "\n\nPress any key to start.\n")
         self.symbols_count = 0
         self.symbols_counter.set(0)
         self.current_speed_counter.set(0)
@@ -190,7 +196,7 @@ class KeyboardTutor(tkinter.Text):
             self.current_step = 0
         self.show()
 
-    def reload_text_with_button(self):
+    def reload_text_button(self):
         self.current_step = 0
         self.show()
 
@@ -205,14 +211,15 @@ class KeyboardTutor(tkinter.Text):
 
     def type(self, event):
         if self.steps[self.current_step] == 'Training':
-            self.current_speed_counter.set(round(self.printed_symbols_count /
-                                                 (time.time() - self.start_time) * 60, 2))
+            self.current_speed_counter.set(
+                round(self.printed_symbols_count /
+                      (time.time() - self.start_time) * 60, 2))
             key = self.check_and_get_char(event)
             current_char = self.get(self.tag_ranges('current_position')[0],
                                     self.tag_ranges('current_position')[1])
             if key:
-                move_correct = (key == current_char or (key == "Return"
-                                                        and current_char == '\u23CE'))
+                move_correct = (key == current_char or
+                                (key == "Return" and current_char == '\u23CE'))
                 if move_correct:
                     self.printed_symbols_count += 1
 

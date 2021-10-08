@@ -48,7 +48,8 @@ class MainWindow(tkinter.Tk):
         self.title("Keyboard Tutor")
         self.protocol("WM_DELETE_WINDOW", self.quit)
         self.minsize(600, 300)
-        self.geometry(f"+{self.winfo_screenwidth() // 5}+{self.winfo_screenheight() // 5}")
+        self.geometry(f"+{self.winfo_screenwidth() // 5}"
+                      f"+{self.winfo_screenheight() // 5}")
         self.resizable(width=False, height=False)
         self.font = ('Arial', 12)
         self.option_add('*TCombobox*Listbox.font', self.font)
@@ -65,21 +66,25 @@ class MainWindow(tkinter.Tk):
         symbols_counter_label = SymbolsCounterLabel(top_frame)
         speed_label = SpeedLabel(top_frame)
 
-        topic = ttk.Combobox(top_frame, values=['Letters', 'Punctuation', 'Numbers', 'Words',
-                                                'Quotations', 'Long Text', 'Python', 'TypeScript'],
+        topic = ttk.Combobox(top_frame, values=['Letters', 'Punctuation',
+                                                'Numbers', 'Words',
+                                                'Quotations', 'Long Text',
+                                                'Python', 'TypeScript'],
                              font=self.font, state='readonly')
         topic.set('Choose training topic')
         topic.pack(side=tkinter.TOP)
 
-        keyboard_tutor = KeyboardTutor(center_frame, symbols_counter_label.counter,
+        keyboard_tutor = KeyboardTutor(center_frame,
+                                       symbols_counter_label.counter,
                                        speed_label.counter, topic, top_frame)
 
         quit_button = tkinter.Button(bottom_frame, text='Quit',
                                      font=('Arial', 12), command=self.quit)
         quit_button.pack(side=tkinter.RIGHT, padx=10, pady=5)
 
-        reload_button = tkinter.Button(bottom_frame, text='Reload text', font=('Arial', 12),
-                                       command=keyboard_tutor.reload_text_with_button)
+        reload_button = tkinter.Button(bottom_frame, text='Reload text',
+                                       font=('Arial', 12),
+                                       command=keyboard_tutor.reload_text_button)
         reload_button.pack(side=tkinter.LEFT, padx=10, pady=5)
 
 
