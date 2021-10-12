@@ -5,6 +5,7 @@ import tkinter
 import time
 import json
 import random
+import pygame
 from text_cleaner import TextCleaner
 
 VALID_SYMBOLS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
@@ -25,12 +26,64 @@ FIRST_MESSAGE = "Let's typing! " \
                 "If you want something more serious and hard, you can " \
                 "choose \"Words\", \"Quotations\" or \"Long Text\".\n\n" \
                 "If you want something special, you can choose \"Python\" " \
-                "or \"TypeScript\" to practice fast typing some of key words " \
-                "of this programming languages."
+                "or \"TypeScript\" to practice fast typing some of key " \
+                "words of this programming languages."
+
+
+class Table:
+    def __init__(self, root, rows, columns, values):
+        for i in range(rows):
+            for j in range(columns):
+                self.e = tkinter.Entry(root, width=16, font=('Arial', 12),
+                                       justify=tkinter.CENTER)
+                if i == 0:
+                    self.e.config(font=('Arial', 13, 'bold'))
+                self.e.grid(row=i, column=j)
+                self.e.insert(tkinter.END, values[i][j])
+                self.e.config(state="readonly")
+
+
+class ProgressTableWindow(tkinter.Toplevel):
+    def __init__(self, main):
+        super().__init__(master=main)
+        self.title("Progress")
+        self.resizable(width=False, height=False)
+
+        columns = ['Training topic', 'Best time', 'Best speed (s/m)',
+                   'Last time', 'Last speed (s/m)']
+        with open("progress.json") as file:
+            self.progress_json = json.load(file)
+
+        lttrs = self.progress_json["Letters"]
+        pct = self.progress_json["Punctuation"]
+        nmbrs = self.progress_json["Numbers"]
+        words = self.progress_json["Words"]
+        qts = self.progress_json["Quotations"]
+        long = self.progress_json["Long Text"]
+        py = self.progress_json["Python"]
+        tps = self.progress_json["TypeScript"]
+        values = [columns,
+                  ['Letters', f'{lttrs["Best time"]}', f'{lttrs["Best speed"]}'
+                      , f'{lttrs["Last time"]}', f'{lttrs["Last speed"]}'],
+                  ['Punctuation', f'{pct["Best time"]}', f'{pct["Best speed"]}'
+                      , f'{pct["Last time"]}', f'{pct["Last speed"]}'],
+                  ['Numbers', f'{nmbrs["Best time"]}', f'{nmbrs["Best speed"]}'
+                      , f'{nmbrs["Last time"]}', f'{nmbrs["Last speed"]}'],
+                  ['Words', f'{words["Best time"]}', f'{words["Best speed"]}',
+                   f'{words["Last time"]}', f'{words["Last speed"]}'],
+                  ['Quotations', f'{qts["Best time"]}', f'{qts["Best speed"]}',
+                   f'{qts["Last time"]}', f'{qts["Last speed"]}'],
+                  ['Long Text', f'{long["Best time"]}', f'{long["Best speed"]}'
+                      , f'{long["Last time"]}', f'{long["Last speed"]}'],
+                  ['Python', f'{py["Best time"]}', f'{py["Best speed"]}'
+                      , f'{py["Last time"]}', f'{py["Last speed"]}'],
+                  ['TypeScript', f'{tps["Best time"]}', f'{tps["Best speed"]}',
+                   f'{tps["Last time"]}', f'{tps["Last speed"]}']]
+        self.table = Table(self, 9, 5, values)
 
 
 class KeyboardTutor(tkinter.Text):
-    def __init__(self, frame, symbols_counter, current_speed_counter,
+    def __init__(self, frame, current_speed_counter,
                  text_topic, frame_for_focus):
 
         scrollbar = tkinter.Scrollbar(frame, orient=tkinter.VERTICAL)
@@ -58,16 +111,26 @@ class KeyboardTutor(tkinter.Text):
         self.text = ''
         self.symbols_count = 0
         self.printed_symbols_count = 0
-        self.symbols_counter = symbols_counter
         self.current_speed_counter = current_speed_counter
         self.mistakes_count = 0
         self.frame_for_focus = frame_for_focus
 
+        self.is_sound_off = False
+        pygame.mixer.init(44100, -16, 2, 2048)
+        self.wa_sound = pygame.mixer.Sound('WA.wav')
+
         self.texts_json = None
         self._load_texts()
         self.text_topic = text_topic
-        self.text_topic.bind("<<ComboboxSelected>>", self.reload_text)
+        self.text_topic.bind("<<ComboboxSelected>>",
+                             self.reload_text_with_change_topic)
         self.show()
+
+    def sound_off(self):
+        self.is_sound_off = True
+
+    def sound_on(self):
+        self.is_sound_off = False
 
     def _load_quotations(self):
         self.text = TextCleaner.clean_text(
@@ -128,15 +191,11 @@ class KeyboardTutor(tkinter.Text):
         else:
             self.insert(tkinter.END, "Text loaded!"
                                      "\n\nPress any key to start.\n")
-        self.symbols_count = 0
-        self.symbols_counter.set(0)
         self.current_speed_counter.set(0)
         self.mistakes_count = 0
 
     def do_training_step(self):
         self._load_text()
-        self.symbols_count = len(self.text)
-        self.symbols_counter.set(self.symbols_count)
         self.printed_symbols_count = 0
         self.insert(tkinter.END, self.text)
         self.insert(tkinter.END, '\u23CE\n')
@@ -148,18 +207,53 @@ class KeyboardTutor(tkinter.Text):
 
     def get_results(self):
         self.end_time = time.time() - self.start_time
-        min = self.end_time / 60
-        sec = self.end_time % 60
-        cps = self.symbols_count / self.end_time
-        wpm = cps * 60 / 5
-        accuracy = 100 * (1 - self.mistakes_count / self.symbols_count)
+        symbols_count = len(self.text)
+        min = int(self.end_time / 60)
+        sec = round(self.end_time % 60)
+        sps = round(symbols_count / self.end_time, 1)
+        spm = round(self.printed_symbols_count /
+                    (time.time() - self.start_time) * 60, 2)
+        wpm = round(sps * 60 / 5, 1)
+        accuracy = round(100 * (1 - self.mistakes_count / symbols_count), 1)
+
+        self._update_progress(min, sec, spm)
+
         return ["Your results is here!\n\n",
-                f"Average time: {int(min)} min {round(sec)} sec.\n",
-                f"Characters per second: {round(cps, 1)}.\n",
-                f"Words per minute: {round(wpm, 1)}.\n",
+                f"Average time: {min} min {sec} sec.\n",
+                f"Symbols count: {symbols_count}.\n",
+                f"Symbols per second: {sps}.\n",
+                f"Symbols per minute: {spm}.\n"
+                f"Words per minute: {wpm}.\n",
                 f"Mistakes: {self.mistakes_count}.\n",
-                f"Accuracy: {round(accuracy, 1)}%.\n",
+                f"Accuracy: {accuracy}%.\n",
                 f"\nPress any key to start next training.\n\n"]
+
+    def _update_progress(self, min, sec, spm):
+        with open('progress.json') as file:
+            progress_json = json.load(file)
+
+        current_time = f"{min} min {sec} sec"
+        text_topic = self.text_topic.get()
+        progress_record = progress_json[text_topic]
+
+        progress_record["Last time"] = current_time
+        progress_record["Last speed"] = spm
+
+        prev_best_time = progress_record["Best time"]
+        if prev_best_time != 0:
+            prev_best_time = prev_best_time.split(' ')
+            if int(prev_best_time[0]) > min \
+                    or int(prev_best_time[0]) == min \
+                    and int(prev_best_time[2]) > sec:
+                progress_record["Best time"] = current_time
+            if spm > float(progress_json[text_topic]["Best speed"]):
+                progress_record["Best speed"] = spm
+        else:
+            progress_record["Best time"] = current_time
+            progress_record["Best speed"] = spm
+
+        with open('progress.json', "w", encoding='utf-8') as f:
+            json.dump(progress_json, f)
 
     def show(self):
         self.config(state=tkinter.NORMAL)
@@ -196,11 +290,11 @@ class KeyboardTutor(tkinter.Text):
             self.current_step = 0
         self.show()
 
-    def reload_text_button(self):
+    def reload_text(self):
         self.current_step = 0
         self.show()
 
-    def reload_text(self, event):
+    def reload_text_with_change_topic(self, event):
         self.current_step = 0
         self.frame_for_focus.focus()
         self.show()
@@ -221,9 +315,13 @@ class KeyboardTutor(tkinter.Text):
                 move_correct = (key == current_char or
                                 (key == "Return" and current_char == '\u23CE'))
                 if move_correct:
+                    if not self.is_sound_off:
+                        self.wa_sound.stop()
                     self.printed_symbols_count += 1
 
                 if self.is_made_mistake(move_correct):
+                    if not self.is_sound_off:
+                        self.wa_sound.play()
                     self.mistakes_count += 1
 
                 self.remove_tags()
@@ -281,3 +379,6 @@ class KeyboardTutor(tkinter.Text):
         line, column = map(int, self.index('correct_mark').split("."))
         end_line, end_column = map(int, self.index(tkinter.END).split("."))
         return line + 1 == end_line and column == end_column
+
+    def load_progress(self):
+        ProgressTableWindow(self)
