@@ -15,6 +15,7 @@ __email__ = 'dashav1605@gmail.com'
 
 import tkinter
 from tkinter import ttk
+from PIL import Image, ImageTk
 from keyboard_tutor import KeyboardTutor
 
 
@@ -52,9 +53,14 @@ class MainWindow(tkinter.Tk):
         center_frame = tkinter.Frame(self)
         center_frame.pack(side=tkinter.TOP, expand=True, fill=tkinter.BOTH)
 
+        volume = Image.open("Volume.png")
+        self.volume_image = ImageTk.PhotoImage(volume)
+        volume_mute = Image.open("VolumeMute.png")
+        self.volume_mute_image = ImageTk.PhotoImage(volume_mute)
+
         self.is_sound_off = False
-        self.sound_button = tkinter.Label(top_frame, text=u"\U0001F508",
-                                          font=('Arial', 15, 'bold'), width=2)
+        self.sound_button = tkinter.Label(top_frame, image=self.volume_image,
+                                          font=('Arial', 15, 'bold'))
         self.sound_button.pack(side=tkinter.LEFT)
         self.sound_button.bind("<Button-1>", self.change_sound_state)
 
@@ -84,11 +90,11 @@ class MainWindow(tkinter.Tk):
     def change_sound_state(self, event):
         if self.is_sound_off:
             self.is_sound_off = False
-            self.sound_button.config(text=u"\U0001F508")
+            self.sound_button.config(image=self.volume_image)
             self.keyboard_tutor.sound_on()
         else:
             self.is_sound_off = True
-            self.sound_button.config(text=u"\U0001F507")
+            self.sound_button.config(image=self.volume_mute_image)
             self.keyboard_tutor.sound_off()
 
 
