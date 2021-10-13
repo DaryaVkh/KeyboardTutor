@@ -7,6 +7,7 @@ import json
 import random
 import pygame
 from text_cleaner import TextCleaner
+from progress_table import ProgressTableWindow
 
 VALID_SYMBOLS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
                  'q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p',
@@ -28,58 +29,6 @@ FIRST_MESSAGE = "Let's typing! " \
                 "If you want something special, you can choose \"Python\" " \
                 "or \"TypeScript\" to practice fast typing some of key " \
                 "words of this programming languages."
-
-
-class Table:
-    def __init__(self, root, rows, columns, values):
-        for i in range(rows):
-            for j in range(columns):
-                self.e = tkinter.Entry(root, width=16, font=('Arial', 12),
-                                       justify=tkinter.CENTER)
-                if i == 0:
-                    self.e.config(font=('Arial', 13, 'bold'))
-                self.e.grid(row=i, column=j)
-                self.e.insert(tkinter.END, values[i][j])
-                self.e.config(state="readonly")
-
-
-class ProgressTableWindow(tkinter.Toplevel):
-    def __init__(self, main):
-        super().__init__(master=main)
-        self.title("Progress")
-        self.resizable(width=False, height=False)
-
-        columns = ['Training topic', 'Best time', 'Best speed (s/m)',
-                   'Last time', 'Last speed (s/m)']
-        with open("progress.json") as file:
-            self.progress_json = json.load(file)
-
-        lttrs = self.progress_json["Letters"]
-        pct = self.progress_json["Punctuation"]
-        nmbrs = self.progress_json["Numbers"]
-        words = self.progress_json["Words"]
-        qts = self.progress_json["Quotations"]
-        long = self.progress_json["Long Text"]
-        py = self.progress_json["Python"]
-        tps = self.progress_json["TypeScript"]
-        values = [columns,
-                  ['Letters', f'{lttrs["Best time"]}', f'{lttrs["Best speed"]}'
-                      , f'{lttrs["Last time"]}', f'{lttrs["Last speed"]}'],
-                  ['Punctuation', f'{pct["Best time"]}', f'{pct["Best speed"]}'
-                      , f'{pct["Last time"]}', f'{pct["Last speed"]}'],
-                  ['Numbers', f'{nmbrs["Best time"]}', f'{nmbrs["Best speed"]}'
-                      , f'{nmbrs["Last time"]}', f'{nmbrs["Last speed"]}'],
-                  ['Words', f'{words["Best time"]}', f'{words["Best speed"]}',
-                   f'{words["Last time"]}', f'{words["Last speed"]}'],
-                  ['Quotations', f'{qts["Best time"]}', f'{qts["Best speed"]}',
-                   f'{qts["Last time"]}', f'{qts["Last speed"]}'],
-                  ['Long Text', f'{long["Best time"]}', f'{long["Best speed"]}'
-                      , f'{long["Last time"]}', f'{long["Last speed"]}'],
-                  ['Python', f'{py["Best time"]}', f'{py["Best speed"]}'
-                      , f'{py["Last time"]}', f'{py["Last speed"]}'],
-                  ['TypeScript', f'{tps["Best time"]}', f'{tps["Best speed"]}',
-                   f'{tps["Last time"]}', f'{tps["Last speed"]}']]
-        self.table = Table(self, 9, 5, values)
 
 
 class KeyboardTutor(tkinter.Text):

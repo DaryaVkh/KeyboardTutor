@@ -21,21 +21,25 @@
 - Python версии не ниже 3.6
 - nlpretext (```pip install nlpretext```)
 - pygame
+- pillow
 
 ### Состав
 - main_window.py
 - keyboard_tutor.py
 - text_cleaner.py
+- progress_table.py
 - tests.py
 - texts.json
 - progress.json
-- requirements.py
+- requirements.txt
 - README.md
 - .gitignore
+- Volume.png
+- VolumeMute.png
 - WA.wav
 
 ### Управление
 
 Пример запуска из консоли: 
 
-```main_window.py``` (внутри директории, содержащей файлы проекта)
+```python3 main_window.py``` (внутри директории, содержащей файлы проекта)
